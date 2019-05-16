@@ -1,21 +1,41 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import LoginView from './src/views/Login/LoginView';
+import HomeView from './src/views/Home/HomeView';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import userReducer from './src/reducer/UserReducer'; 
 
-export default class App extends React.Component {
+const store = createStore(userReducer);
+
+const MainNavigator = createStackNavigator(
+  {
+    Login: {
+      screen: LoginView,
+      navigationOptions: {
+        header: null
+      }
+    },
+    Home: {
+      screen: HomeView,
+      navigationOptions: {
+        header: null
+      }
+    }
+  },
+  {
+    initialRouteName: 'Login'
+  }
+);
+
+const AppContainer = createAppContainer(MainNavigator);
+
+export default class App extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <Provider store={store}>
+        <AppContainer/>
+      </Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
