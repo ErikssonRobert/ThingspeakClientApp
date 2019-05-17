@@ -4,37 +4,37 @@ import {
  } from 'react-native';
 import Content from './Content';
 import { connect } from 'react-redux';
+import { fetchAllLatest } from '../../services/FetchAllLatest';
 
 class HomeView extends Component {
-
-    componentDidMount() {
-        this._loadInitialState().done();
+    constructor(props) {
+        super(props);
+        this.state = {
+            channelName: '',
+        }
     }
 
-    _loadInitialState = async () => {
-        try {
-            var id = await AsyncStorage.getItem('id');
-            if (id !== null) {
-                console.log('Id found!');
-            } else {
-                console.log('Id not found!');
-            }
-            var key = await AsyncStorage.getItem('key');
-            if (key !== null) {
-                console.log('Key found!');
-            } else {
-                console.log('Key not found!');
-            }
-        } catch (error) {
-            //Error!
-            console.log('OH nOOO load fail!');
-        }
-    };
+    componentDidMount() {
+        this.fetchAllLatestData();
+    }
+
+    fetchAllLatestData() {
+        fetchAllLatest(this.props.user.id, this.props.user.apiKey)
+            .then((result) => {
+                if (result.error === 'Not Found') {
+                    //ERROR fetch failed!
+                    console.log('Error!: ' + result.error);
+                } else {
+                    console.log('Channel name: ' + result.channel.name);
+                    this.setState({ channelName: result.channel.name });
+                }
+            });
+    }
 
     render() {
         return(
             <View>
-                <Content />
+                <Content one={this.state.channelName} two={this.props.user.apiKey} />
             </View>
         );
     }

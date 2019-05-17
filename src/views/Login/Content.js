@@ -9,6 +9,7 @@ import viewStyles from '../../styles/viewStyles/styles';
 import styles from '../../styles/componentStyles/styles';
 
 class Content extends Component {
+    
     render() {
         return(
             <View style={viewStyles.container}>
