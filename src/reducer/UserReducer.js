@@ -1,10 +1,16 @@
 import { combineReducers } from 'redux';
-import { EDIT_ID } from '../constants/actionTypes';
-import { EDIT_KEY } from '../constants/actionTypes';
+import { EDIT_ID, EDIT_KEY } from '../constants/actionTypes';
+import { SINGLE_VALUE } from '../constants/componentTypes';
 
 const INITIAL_STATE = {
     id: '',
     apiKey: '',
+    data: [
+        {
+            fieldNumber: 1,
+            type: SINGLE_VALUE,
+        }
+    ],
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {

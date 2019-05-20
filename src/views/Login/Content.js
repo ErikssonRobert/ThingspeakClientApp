@@ -24,10 +24,12 @@ class Content extends Component {
                     } style={styles.textInput}>
                     {this.props.apiKey}
                 </TextInput>
-                <Button 
-                    title='Login' 
-                    onPress={() => this.props.navigate('Home')}
-                    style={styles.headerText}/>
+                <View style={styles.button}>
+                    <Button 
+                        title='Login' 
+                        onPress={() => this.props.navigate('Home')}
+                        style={styles.button}/>
+                </View>
             </View>
         );
     }

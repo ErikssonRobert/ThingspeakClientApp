@@ -21,7 +21,7 @@ class LoginView extends Component {
             await AsyncStorage.setItem('id', id);
         } catch (error) {
             //Error!
-            console.log('OH nOOO Store fail!');
+            console.log('Store id failed!');
         }
     };
 
@@ -30,7 +30,7 @@ class LoginView extends Component {
             await AsyncStorage.setItem('key', key);
         } catch (error) {
             //Error!
-            console.log('OH nOOO Store fail!');
+            console.log('Store api key failed!');
         }
     };
 
@@ -45,7 +45,7 @@ class LoginView extends Component {
             }
         } catch (error) {
             //Error!
-            console.log('OH nOOO load fail!');
+            console.log('load id failed!');
         }
     };
 
@@ -60,7 +60,7 @@ class LoginView extends Component {
             }
         } catch (error) {
             //Error!
-            console.log('OH nOOO load fail!');
+            console.log('Load api key failed!');
         }
     };
 
@@ -79,9 +79,7 @@ class LoginView extends Component {
     render() {
         const { navigate } = this.props.navigation;
         return(
-            <KeyboardAvoidingView behavior='padding'>
-                <Content id={this.props.user.id} apiKey={this.props.user.apiKey} getId={this.changeStateChannelId} getKey={this.changeStateApiKey} navigate={navigate}/>
-            </KeyboardAvoidingView>
+            <Content id={this.props.user.id} apiKey={this.props.user.apiKey} getId={this.changeStateChannelId} getKey={this.changeStateApiKey} navigate={navigate}/>
         );
     }
 }
