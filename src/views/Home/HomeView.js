@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { 
-    View,
-    Text
+import {
+    Text,
+    AsyncStorage
  } from 'react-native';
 import Content from './Content';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { fetchAllLatest } from '../../services/FetchAllLatest';
-import viewStyles from '../../styles/viewStyles/styles';
 import componentStyles from '../../styles/componentStyles/styles';
+import { saveStoredData, getStoredUserData, editNewData } from '../../actions/index';
 
 class HomeView extends Component {
     constructor(props) {
@@ -18,10 +19,12 @@ class HomeView extends Component {
             isLoading: true,
             error: false,
             errorMessage: '',
+            data: [],
         }
     }
 
     componentDidMount() {
+        this.getStoredUserData();
         this.fetchAllLatestData();
     }
 
@@ -43,54 +46,55 @@ class HomeView extends Component {
             });
     }
 
+    storeComponentsData = async () => {
+        try {
+            await AsyncStorage.setItem('data', JSON.stringify(this.props.user.data));
+            console.log('Data stored!: ' + this.props.user.data);
+            this.props.editNewData(false);
+        } catch (error) {
+            //Error!
+            console.log('Store data failed!');
+        }
+    };
+
+    saveUserData = () => {
+        console.log('Saving data: ' + this.state.data);
+        this.props.saveStoredData(this.state.data);
+    };
+
+    getStoredUserData = async () => {
+        try {
+            var dataString = await AsyncStorage.getItem('data');
+            console.log('DataString!!::: ' + dataString);
+            if (dataString !== null) {
+                var data = JSON.parse(dataString);
+                console.log('Data found!' + data);
+                this.setState({
+                    data: data
+                });
+                console.log(this.state.data);
+                this.saveUserData();
+            } else {
+                console.log('DataString not found!');
+            }
+        } catch (error) {
+            //Error!
+            console.log('load dataString failed! ' + error);
+        }
+    };
+
     handleFetchSuccess(res) {
-        var channelName = '';
-        var numberOfFields = 0;
-        var error = false;
-        if (res.channel.field1) {
-            channelName = res.channel.name;
-            numberOfFields++;
-        } else {
-            error = true;
-        }
-        if (res.channel.field2) {
-            numberOfFields++;
-        }
-        if (res.channel.field3) {
-            numberOfFields++;
-        }
-        if (res.channel.field4) {
-            numberOfFields++;
-        }
-        if (res.channel.field5) {
-            numberOfFields++;
-        }
-        if (res.channel.field6) {
-            numberOfFields++;
-        }
-        if (res.channel.field7) {
-            numberOfFields++;
-        }
-        if (res.channel.field8) {
-            numberOfFields++;
-        }
-        if (!error) {
-            this.setState({ 
-                channelName: channelName,
-                numberOfFields: numberOfFields,
-                isLoading: false
-            });
-        } else {
-            this.setState({ 
-                channelName: channelName,
-                isLoading: false,
-                error: true,
-                errorMessage: 'No fields found on channel'
-            });
-        }
+        var channelName = res.channel.name;
+        this.setState({ 
+            channelName: channelName,
+            isLoading: false
+        });
     }
 
-    test(channelName, isLoading, error, errorMessage) {
+    renderView(channelName, isLoading, error, errorMessage) {
+        if (this.props.user.newData) {
+            this.storeComponentsData();
+        }
         return isLoading ? <Text style={componentStyles.headerText}>Loading</Text> : 
             error ? <Text style={componentStyles.headerText}>{errorMessage}</Text> : 
             <Content name={channelName} />
@@ -99,7 +103,7 @@ class HomeView extends Component {
     render() {
         const { channelName, isLoading, error, errorMessage } = this.state;
         return(
-            this.test(channelName, isLoading, error, errorMessage)
+            this.renderView(channelName, isLoading, error, errorMessage)
         );
     }
 }
@@ -109,4 +113,12 @@ const mapStateToProps = (state) => {
     return { user }
 };
 
-export default connect(mapStateToProps)(HomeView);
+const mapDispatchToProps = dispatch => (
+    bindActionCreators({
+        getStoredUserData,
+        saveStoredData,
+        editNewData,
+    }, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeView);

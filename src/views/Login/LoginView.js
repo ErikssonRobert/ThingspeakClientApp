@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { 
-    KeyboardAvoidingView,
     AsyncStorage
  } from 'react-native';
 import Content from './Content';
 import { connect } from 'react-redux';
-import { editId, editKey } from '../../actions/index';
+import { editId, editKey, saveStoredData } from '../../actions/index';
 import { bindActionCreators } from 'redux';
 
 class LoginView extends Component {
@@ -58,9 +57,24 @@ class LoginView extends Component {
             } else {
                 console.log('Key not found!');
             }
-        } catch (error) {
+        } catch (error) { 
             //Error!
             console.log('Load api key failed!');
+        }
+    };
+
+    _loadInitialStateSettings = async () => {
+        try {
+            var settings = await AsyncStorage.getItem('settings');
+            if (settings !== null) {
+                console.log('Id found!' + settings);
+                this.changeStateChannelSettings(JSON.parse(settings));
+            } else {
+                console.log('settings not found!');
+            }
+        } catch (error) {
+            //Error!
+            console.log('load settings failed!');
         }
     };
 

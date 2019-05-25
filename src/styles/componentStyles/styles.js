@@ -24,5 +24,16 @@ export default StyleSheet.create({
         margin: 8,
         position: 'relative',
         alignSelf: 'center',
+    },
+    addButton: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: '#ee6e73',
+        position: 'absolute',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bottom: 10,
+        right: 10,
     }
 });

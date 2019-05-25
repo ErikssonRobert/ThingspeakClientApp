@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import LoginView from './src/views/Login/LoginView';
-import HomeView from './src/views/Home/HomeView';
+import LoginView from './src/views/login/LoginView';
+import HomeView from './src/views/home/HomeView';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
