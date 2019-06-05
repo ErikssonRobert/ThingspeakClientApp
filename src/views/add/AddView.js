@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Content from './Content';
-import { addComponent, editNewData } from '../../actions/index';
-import { bindActionCreators } from 'redux';
 
 class AddView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fieldNumber: 0,
-            type: '',
+            fieldNumber: 1,
+            type: 'SINGLE_VALUE',
         }
     }
 
@@ -25,16 +23,21 @@ class AddView extends Component {
         });
     };
 
-    addComponentPressed = () => {
+    addComponentPressed = async () => {
         const component = this.state;
-        this.props.addComponent(component);
-        this.props.editNewData(true);
+        await this.props.addComp(component);
         this.props.add();
     };
 
     render() {
         return (
-            <Content getField={this.getFieldNumber} getType={this.getType} addComponent={this.addComponentPressed} />
+            <Content 
+                currentField={this.state.fieldNumber} 
+                getField={this.getFieldNumber} 
+                currentType={this.state.type} 
+                getType={this.getType} 
+                addComponent={this.addComponentPressed} 
+            />
         );
     }
 }
@@ -44,11 +47,4 @@ const mapStateToProps = (state) => {
     return { user }
 };
 
-const mapDispatchToProps = dispatch => (
-    bindActionCreators({
-        addComponent,
-        editNewData,
-    }, dispatch)
-);
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddView);
+export default connect(mapStateToProps)(AddView);

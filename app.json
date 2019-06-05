@@ -8,13 +8,13 @@
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "splash": {
       "image": "./src/assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2F4550"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,6 +24,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.roberteriksson.thingspeakclientapp"
     }
   }
 }

@@ -3,13 +3,14 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Image
+    Image,
+    ScrollView
  } from 'react-native';
-import { connect } from 'react-redux';
 import viewStyles from '../../styles/viewStyles/styles';
 import styles from '../../styles/componentStyles/styles';
-import SingleValue from '../../components/cards/SingleValue';
+import DataView from '../../components/cards/DataView';
 import AddView from '../add/AddView';
+import shortid from 'shortid';
 
 const addSymbols = {
     add: require('../../assets/add.png'),
@@ -25,17 +26,7 @@ class Content extends Component {
         }
     }
 
-    handleUserData(data) {
-        var widgets = [];
-        data.forEach((item, index) => {
-            if (item.type === 'SINGLE_VALUE') {
-                widgets.push(<SingleValue key={index} field={item.fieldNumber} />);
-            }
-        });
-        return widgets;
-    }
-
-    handlePress = () => {
+    handlePress = async () => {
         this.setState({
             showAdd: !this.state.showAdd,
             addSymbol: this.state.addSymbol === addSymbols.add ? addSymbols.clear : addSymbols.add,
@@ -47,23 +38,27 @@ class Content extends Component {
         return(
             <View style={viewStyles.container}>
                 <Text style={styles.headerText}>{this.props.name}</Text>
+                <ScrollView>
                 {
-                    this.handleUserData(this.props.user.data)
+                    this.props.data.map((data, i) => 
+                    <DataView 
+                        key={shortid.generate()} 
+                        index={i} 
+                        delete={this.props.removeComp} 
+                        field={data.fieldNumber}
+                        type={data.type}
+                    />)
                 }
+                </ScrollView>
                 <TouchableOpacity
                     onPress={this.handlePress}
                     style={styles.addButton}>
                     <Image source={addSymbol} />
                 </TouchableOpacity>
-                {showAdd ? <AddView add={this.handlePress} /> : null}
+                {showAdd ? <AddView add={this.handlePress} addComp={this.props.addComponent} /> : null}
             </View>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    const { user } = state
-    return { user }
-};
-
-export default connect(mapStateToProps)(Content);
+export default Content;

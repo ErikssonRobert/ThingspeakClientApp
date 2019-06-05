@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import {
     Text,
-    AsyncStorage
+    AsyncStorage,
+    ActivityIndicator,
+    View,
  } from 'react-native';
 import Content from './Content';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { fetchAllLatest } from '../../services/FetchAllLatest';
 import componentStyles from '../../styles/componentStyles/styles';
-import { saveStoredData, getStoredUserData, editNewData } from '../../actions/index';
+import viewStyles from '../../styles/viewStyles/styles';
 
 class HomeView extends Component {
     constructor(props) {
@@ -20,6 +21,7 @@ class HomeView extends Component {
             error: false,
             errorMessage: '',
             data: [],
+            newData: false,
         }
     }
 
@@ -48,18 +50,15 @@ class HomeView extends Component {
 
     storeComponentsData = async () => {
         try {
-            await AsyncStorage.setItem('data', JSON.stringify(this.props.user.data));
-            console.log('Data stored!: ' + this.props.user.data);
-            this.props.editNewData(false);
+            await AsyncStorage.setItem('data', JSON.stringify(this.state.data));
+            console.log('Data stored!: ' + this.state.data);
+            this.setState({
+                newData: false
+            });
         } catch (error) {
             //Error!
             console.log('Store data failed!');
         }
-    };
-
-    saveUserData = () => {
-        console.log('Saving data: ' + this.state.data);
-        this.props.saveStoredData(this.state.data);
     };
 
     getStoredUserData = async () => {
@@ -73,7 +72,6 @@ class HomeView extends Component {
                     data: data
                 });
                 console.log(this.state.data);
-                this.saveUserData();
             } else {
                 console.log('DataString not found!');
             }
@@ -91,19 +89,50 @@ class HomeView extends Component {
         });
     }
 
-    renderView(channelName, isLoading, error, errorMessage) {
-        if (this.props.user.newData) {
+    addComponent = (component) => {
+        var components = Object.assign([], this.state.data);
+        components.push(component);
+        this.setState({
+            newData: true,
+            data: components
+        });
+    }
+
+    removeComponent = (index) => {
+        console.log('Removing: ' + index);
+        var components = Object.assign([], this.state.data);
+        components.splice(index, 1);
+        this.setState({
+            newData: true,
+            data: components
+        });
+        console.log(this.state.data);
+    }
+
+    renderView(channelName, isLoading, error, errorMessage, data) {
+        if (this.state.newData) {
             this.storeComponentsData();
         }
-        return isLoading ? <Text style={componentStyles.headerText}>Loading</Text> : 
-            error ? <Text style={componentStyles.headerText}>{errorMessage}</Text> : 
-            <Content name={channelName} />
+        return isLoading ? 
+            <View style={viewStyles.container}>
+                <ActivityIndicator style={componentStyles.loadingBig} size='large' /> 
+            </View> : 
+            error ? 
+            <View style={viewStyles.container}>
+                <Text style={componentStyles.headerText}>{errorMessage}</Text>
+            </View> : 
+            <Content 
+                name={channelName}
+                data={data}
+                addComponent={this.addComponent}
+                removeComp={this.removeComponent}
+            />
     }
 
     render() {
-        const { channelName, isLoading, error, errorMessage } = this.state;
+        const { channelName, isLoading, error, errorMessage, data } = this.state;
         return(
-            this.renderView(channelName, isLoading, error, errorMessage)
+            this.renderView(channelName, isLoading, error, errorMessage, data)
         );
     }
 }
@@ -113,12 +142,4 @@ const mapStateToProps = (state) => {
     return { user }
 };
 
-const mapDispatchToProps = dispatch => (
-    bindActionCreators({
-        getStoredUserData,
-        saveStoredData,
-        editNewData,
-    }, dispatch)
-);
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomeView);
+export default connect(mapStateToProps)(HomeView);
