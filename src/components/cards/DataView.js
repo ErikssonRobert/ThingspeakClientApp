@@ -134,7 +134,7 @@ class SingleValue extends Component {
                 if (data.field1 == null) {
                     console.log('ERROR: No data!');
                 } else {
-                    values.push(data.field1);
+                    values.push(parseInt(data.field1));
                     var date = new Date(data.created_at);
                     dates.push('' + date.getHours() + ':' + date.getMinutes());
                 }
@@ -146,7 +146,7 @@ class SingleValue extends Component {
                 if (data.field2 == null) {
                     console.log('ERROR: No data!');
                 } else {
-                    values.push(data.field2);
+                    values.push(parseInt(data.field2));
                     var date = new Date(data.created_at);
                     dates.push('' + date.getHours() + ':' + date.getMinutes());
                 }
@@ -158,7 +158,7 @@ class SingleValue extends Component {
                 if (data.field3 == null) {
                     console.log('ERROR: No data!');
                 } else {
-                    values.push(data.field3);
+                    values.push(parseInt(data.field3));
                     var date = new Date(data.created_at);
                     dates.push('' + date.getHours() + ':' + date.getMinutes());
                 }
@@ -170,7 +170,7 @@ class SingleValue extends Component {
                 if (data.field4 == null) {
                     console.log('ERROR: No data!');
                 } else {
-                    values.push(data.field4);
+                    values.push(parseInt(data.field4));
                     var date = new Date(data.created_at);
                     dates.push('' + date.getHours() + ':' + date.getMinutes());
                 }
@@ -182,7 +182,7 @@ class SingleValue extends Component {
                 if (data.field5 == null) {
                     console.log('ERROR: No data!');
                 } else {
-                    values.push(data.field5);
+                    values.push(parseInt(data.field5));
                     var date = new Date(data.created_at);
                     dates.push('' + date.getHours() + ':' + date.getMinutes());
                 }
@@ -194,7 +194,7 @@ class SingleValue extends Component {
                 if (data.field6 == null) {
                     console.log('ERROR: No data!');
                 } else {
-                    values.push(data.field6);
+                    values.push(parseInt(data.field6));
                     var date = new Date(data.created_at);
                     dates.push('' + date.getHours() + ':' + date.getMinutes());
                 }
@@ -206,7 +206,7 @@ class SingleValue extends Component {
                 if (data.field7 == null) {
                     console.log('ERROR: No data!');
                 } else {
-                    values.push(data.field7);
+                    values.push(parseInt(data.field7));
                     var date = new Date(data.created_at);
                     dates.push('' + date.getHours() + ':' + date.getMinutes());
                 }
@@ -218,7 +218,7 @@ class SingleValue extends Component {
                 if (data.field8 == null) {
                     console.log('ERROR: No data!');
                 } else {
-                    values.push(data.field8);
+                    values.push(parseInt(data.field8));
                     var date = new Date(data.created_at);
                     dates.push('' + date.getHours() + ':' + date.getMinutes());
                 }
@@ -269,7 +269,9 @@ class SingleValue extends Component {
                     chartConfig={{
                         backgroundGradientFrom: COLORS.BROWN,
                         backgroundGradientTo: COLORS.BROWN,
-                        color: (opacity = 1) => `rgba(157, 132, 32, ${opacity})`,
+                        color: (opacity = 1) => {
+                            return `rgba(157, 132, 32, ${opacity})`;
+                        },
                         strokeWidth: 2
                     }}
                     bezier
