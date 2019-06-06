@@ -12,6 +12,16 @@ import DataView from '../../components/cards/DataView';
 import AddView from '../add/AddView';
 import shortid from 'shortid';
 
+/*
+TODO:
+import RefreshControl for easy refresh of components
+_onRefresh = () => { 
+    this.setState({refreshing: true});
+    :maybe add a timer here for 300 milliseconds:
+    this.setState({refreshing: false});
+}
+*/
+
 const addSymbols = {
     add: require('../../assets/add.png'),
     clear: require('../../assets/clear.png')
@@ -40,13 +50,13 @@ class Content extends Component {
                 <Text style={styles.headerText}>{this.props.name}</Text>
                 <ScrollView>
                 {
-                    this.props.data.map((data, i) => 
+                    this.props.settings.map((settings, i) => 
                     <DataView 
                         key={shortid.generate()} 
                         index={i} 
                         delete={this.props.removeComp} 
-                        field={data.fieldNumber}
-                        type={data.type}
+                        field={settings.fieldNumber}
+                        type={settings.type}
                     />)
                 }
                 </ScrollView>

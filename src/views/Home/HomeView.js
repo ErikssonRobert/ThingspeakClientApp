@@ -7,7 +7,7 @@ import {
  } from 'react-native';
 import Content from './Content';
 import { connect } from 'react-redux';
-import { fetchAllLatest } from '../../services/FetchAllLatest';
+import { fetchAll } from '../../services/FetchAll';
 import componentStyles from '../../styles/componentStyles/styles';
 import viewStyles from '../../styles/viewStyles/styles';
 
@@ -16,22 +16,22 @@ class HomeView extends Component {
         super(props);
         this.state = {
             channelName: '',
-            numberOfFields: 0,
             isLoading: true,
             error: false,
             errorMessage: '',
+            settings: [],
             data: [],
             newData: false,
         }
     }
 
     componentDidMount() {
-        this.getStoredUserData();
-        this.fetchAllLatestData();
+        this.getStoredUserSettings();
+        this.fetchAllData();
     }
 
-    fetchAllLatestData() {
-        fetchAllLatest(this.props.user.id, this.props.user.apiKey)
+    fetchAllData() {
+        fetchAll(this.props.user.id, this.props.user.apiKey)
             .then((result) => {
                 if (result.error === 'Not Found' || result === -1) {
                     //ERROR fetch failed!
@@ -45,39 +45,42 @@ class HomeView extends Component {
                     this.handleFetchSuccess(result);
                     console.log('Fetch succeded');
                 }
+            })
+            .catch((error) => {
+                console.log('ERROR fetching data! ' + error);
             });
     }
 
     storeComponentsData = async () => {
         try {
-            await AsyncStorage.setItem('data', JSON.stringify(this.state.data));
-            console.log('Data stored!: ' + this.state.data);
+            await AsyncStorage.setItem('settings', JSON.stringify(this.state.settings));
+            console.log('Settings stored!: ' + this.state.settings);
             this.setState({
                 newData: false
             });
         } catch (error) {
             //Error!
-            console.log('Store data failed!');
+            console.log('Store settings failed! ' + error);
         }
     };
 
-    getStoredUserData = async () => {
+    getStoredUserSettings = async () => {
         try {
-            var dataString = await AsyncStorage.getItem('data');
-            console.log('DataString!!::: ' + dataString);
-            if (dataString !== null) {
-                var data = JSON.parse(dataString);
-                console.log('Data found!' + data);
+            var settingsString = await AsyncStorage.getItem('settings');
+            console.log('settingsString!!::: ' + settingsString);
+            if (settingsString !== null) {
+                var settings = JSON.parse(settingsString);
+                console.log('Settings found!' + settings);
                 this.setState({
-                    data: data
+                    settings: settings
                 });
-                console.log(this.state.data);
+                console.log(this.state.settings);
             } else {
-                console.log('DataString not found!');
+                console.log('settingsString not found!');
             }
         } catch (error) {
             //Error!
-            console.log('load dataString failed! ' + error);
+            console.log('load settingsString failed! ' + error);
         }
     };
 
@@ -90,26 +93,26 @@ class HomeView extends Component {
     }
 
     addComponent = (component) => {
-        var components = Object.assign([], this.state.data);
+        var components = Object.assign([], this.state.settings);
         components.push(component);
         this.setState({
             newData: true,
-            data: components
+            settings: components
         });
     }
 
     removeComponent = (index) => {
         console.log('Removing: ' + index);
-        var components = Object.assign([], this.state.data);
+        var components = Object.assign([], this.state.settings);
         components.splice(index, 1);
         this.setState({
             newData: true,
-            data: components
+            settings: components
         });
-        console.log(this.state.data);
+        console.log(this.state.settings);
     }
 
-    renderView(channelName, isLoading, error, errorMessage, data) {
+    renderView(channelName, isLoading, error, errorMessage, settings) {
         if (this.state.newData) {
             this.storeComponentsData();
         }
@@ -123,16 +126,16 @@ class HomeView extends Component {
             </View> : 
             <Content 
                 name={channelName}
-                data={data}
+                settings={settings}
                 addComponent={this.addComponent}
                 removeComp={this.removeComponent}
             />
     }
 
     render() {
-        const { channelName, isLoading, error, errorMessage, data } = this.state;
+        const { channelName, isLoading, error, errorMessage, settings } = this.state;
         return(
-            this.renderView(channelName, isLoading, error, errorMessage, data)
+            this.renderView(channelName, isLoading, error, errorMessage, settings)
         );
     }
 }

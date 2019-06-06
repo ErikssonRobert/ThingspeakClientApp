@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { 
     View,
     Text,
-    Button,
     TouchableOpacity,
     Dimensions,
     ActivityIndicator
@@ -58,6 +57,9 @@ class SingleValue extends Component {
                     if (this._isMounted)
                         this.handleFetchSuccess(result, this.props.field);
                 }
+            })
+            .catch((error) => {
+                console.log('ERROR fetching latest data! ' + error);
             });
     }
 
@@ -72,6 +74,9 @@ class SingleValue extends Component {
                     if (this._isMounted)
                         this.handleFetchSuccessMany(result, this.props.field);
                 }
+            })
+            .catch((error) => {
+                console.log('ERROR fetching data! ' + error);
             });
     }
 
