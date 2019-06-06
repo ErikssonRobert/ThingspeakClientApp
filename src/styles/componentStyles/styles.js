@@ -66,5 +66,12 @@ export default StyleSheet.create({
         alignSelf: 'center',
         marginTop: '50%',
         transform: [{ scale: 3 }],
+    },
+    logo: {
+        marginTop: 16,
+        width: '90%', 
+        height: '30%', 
+        resizeMode: 'contain', 
+        alignSelf: 'center'
     }
 });

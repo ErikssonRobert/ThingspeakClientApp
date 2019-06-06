@@ -4,7 +4,8 @@ import {
     Text,
     TouchableOpacity,
     Image,
-    ScrollView
+    ScrollView,
+    RefreshControl
  } from 'react-native';
 import viewStyles from '../../styles/viewStyles/styles';
 import styles from '../../styles/componentStyles/styles';
@@ -33,6 +34,7 @@ class Content extends Component {
         this.state = {
             showAdd: false,
             addSymbol: addSymbols.add,
+            refreshing: false,
         }
     }
 
@@ -43,12 +45,24 @@ class Content extends Component {
         });
     }
 
+    _onRefresh = () => { 
+        this.setState({refreshing: true});
+        // maybe add a timer here for 300 milliseconds
+        this.setState({refreshing: false});
+    }
+
     render() {
         const { showAdd, addSymbol } = this.state;
         return(
             <View style={viewStyles.container}>
                 <Text style={styles.headerText}>{this.props.name}</Text>
-                <ScrollView>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl 
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh}
+                        />
+                    }>
                 {
                     this.props.settings.map((settings, i) => 
                     <DataView 
