@@ -17,7 +17,7 @@ class Content extends Component {
     render() {
         return(
             <View style={viewStyles.container}>
-                <Image source={logo} style={{width: '90%', height: '30%', resizeMode: 'contain', alignSelf: 'center'}}/>
+                <Image source={logo} style={styles.logo}/>
                 <TextInput onChangeText={(text) => 
                         this.props.getId(text)
                     } style={styles.textInput}

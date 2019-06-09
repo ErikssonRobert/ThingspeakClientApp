@@ -15,7 +15,7 @@ import {
  import styles from '../../styles/cardStyles/styles';
  import COLORS from '../../constants/colors';
 
-class SingleValue extends Component {
+class DataView extends Component {
     _isMounted = false;
     constructor(props) {
         super(props);
@@ -53,7 +53,7 @@ class SingleValue extends Component {
                     //ERROR fetch failed!
                     console.log('Error!: ' + result.error);
                 } else {
-                    console.log('Fetch succeded! SingleValue.js');
+                    console.log('Fetch succeded! DataView.js');
                     if (this._isMounted)
                         this.handleFetchSuccess(result, this.props.field);
                 }
@@ -70,7 +70,7 @@ class SingleValue extends Component {
                     //ERROR fetch failed!
                     console.log('Error!: ' + result.error);
                 } else {
-                    console.log('Fetch succeded! SingleValue.js');
+                    console.log('Fetch succeded! DataView.js');
                     if (this._isMounted)
                         this.handleFetchSuccessMany(result, this.props.field);
                 }
@@ -317,4 +317,4 @@ const mapStateToProps = (state) => {
     return { user }
 };
 
-export default connect(mapStateToProps)(SingleValue);
+export default connect(mapStateToProps)(DataView);

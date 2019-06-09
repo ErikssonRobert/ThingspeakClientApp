@@ -51,7 +51,7 @@ class HomeView extends Component {
             });
     }
 
-    storeComponentsData = async () => {
+    storeComponentSettings = async () => {
         try {
             await AsyncStorage.setItem('settings', JSON.stringify(this.state.settings));
             console.log('Settings stored!: ' + this.state.settings);
@@ -114,7 +114,7 @@ class HomeView extends Component {
 
     renderView(channelName, isLoading, error, errorMessage, settings) {
         if (this.state.newData) {
-            this.storeComponentsData();
+            this.storeComponentSettings();
         }
         return isLoading ? 
             <View style={viewStyles.container}>

@@ -13,16 +13,6 @@ import DataView from '../../components/cards/DataView';
 import AddView from '../add/AddView';
 import shortid from 'shortid';
 
-/*
-TODO:
-import RefreshControl for easy refresh of components
-_onRefresh = () => { 
-    this.setState({refreshing: true});
-    :maybe add a timer here for 300 milliseconds:
-    this.setState({refreshing: false});
-}
-*/
-
 const addSymbols = {
     add: require('../../assets/add.png'),
     clear: require('../../assets/clear.png')
@@ -47,7 +37,6 @@ class Content extends Component {
 
     _onRefresh = () => { 
         this.setState({refreshing: true});
-        // maybe add a timer here for 300 milliseconds
         this.setState({refreshing: false});
     }
 

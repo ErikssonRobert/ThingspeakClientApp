@@ -4,7 +4,7 @@ import {
  } from 'react-native';
 import Content from './Content';
 import { connect } from 'react-redux';
-import { editId, editKey, saveStoredData } from '../../actions/index';
+import { editId, editKey } from '../../actions/index';
 import { bindActionCreators } from 'redux';
 
 class LoginView extends Component {
@@ -63,27 +63,14 @@ class LoginView extends Component {
         }
     };
 
-    _loadInitialStateSettings = async () => {
-        try {
-            var settings = await AsyncStorage.getItem('settings');
-            if (settings !== null) {
-                console.log('Id found!' + settings);
-                this.changeStateChannelSettings(JSON.parse(settings));
-            } else {
-                console.log('settings not found!');
-            }
-        } catch (error) {
-            //Error!
-            console.log('load settings failed!');
-        }
-    };
-
+    // Edit ID in store, save with asyncstorage
     changeStateChannelId = (id) => {
         console.log('id from input: ' + id);
         this.props.editId(id);
         this._storeIdData(id);
     }
 
+    // Edit API key in store, save with asyncstorage
     changeStateApiKey = (key) => {
         console.log('key from input: ' + key);
         this.props.editKey(key);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LoginView from './src/views/login/LoginView';
+import EntryView from './src/views/entry/EntryView';
 import HomeView from './src/views/home/HomeView';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import { Provider } from 'react-redux';
@@ -10,8 +10,8 @@ const store = createStore(userReducer);
 
 const MainNavigator = createStackNavigator(
   {
-    Login: {
-      screen: LoginView,
+    Entry: {
+      screen: EntryView,
       navigationOptions: {
         header: null
       }
@@ -24,7 +24,7 @@ const MainNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Login'
+    initialRouteName: 'Entry'
   }
 );
 
