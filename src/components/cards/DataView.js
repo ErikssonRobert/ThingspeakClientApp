@@ -29,7 +29,8 @@ class DataView extends Component {
             isPressed: false,
         }
     }
-
+    // _isMounted might be redundant...
+    // call fetchmethod depending on type
     componentDidMount() {
         this._isMounted = true;
         switch(this.props.type) {
@@ -46,6 +47,7 @@ class DataView extends Component {
         this._isMounted = false;
     }
 
+    // SINGLE_VALUE fetch
     fetchOneLatestData = async () => {
         await fetchOneLatest(this.props.user.id, this.props.user.apiKey, this.props.field)
             .then((result) => {
@@ -63,6 +65,7 @@ class DataView extends Component {
             });
     }
 
+    // GRAPH_VALUES fetch
     fetchOneData = async () => {
         await fetchOne(this.props.user.id, this.props.user.apiKey, this.props.field)
             .then((result) => {
@@ -80,42 +83,13 @@ class DataView extends Component {
             });
     }
 
+    // single value handler
     handleFetchSuccess(res, field) {
         var title = '';
         var value = '';
         var date = new Date(res.feeds[0].created_at);
-        if (field === 1) {
-            title = res.channel.field1;
-            value = res.feeds[0].field1;
-        }
-        if (field === 2) {
-            title = res.channel.field2;
-            value = res.feeds[0].field2;
-        }
-        if (field === 3) {
-            title = res.channel.field3;
-            value = res.feeds[0].field3;
-        }
-        if (field === 4) {
-            title = res.channel.field4;
-            value = res.feeds[0].field4;
-        }
-        if (field === 5) {
-            title = res.channel.field5;
-            value = res.feeds[0].field5;
-        }
-        if (field === 6) {
-            title = res.channel.field6;
-            value = res.feeds[0].field6;
-        }
-        if (field === 7) {
-            title = res.channel.field7;
-            value = res.feeds[0].field7;
-        }
-        if (field === 8) {
-            title = res.channel.field8;
-            value = res.feeds[0].field8;
-        }
+        title = res.channel['field' + field];
+        value = res.feeds[0]['field' + field];
         this.setState({ 
             title: title,
             value: value,
@@ -124,106 +98,21 @@ class DataView extends Component {
         });
     }
 
+    // graph values handler
     handleFetchSuccessMany(res, field) {
         var title = '';
         var values = [];
         var dates = [];
-        if (field === 1) {
-            title = res.channel.field1;
-            res.feeds.forEach(data => {
-                if (data.field1 == null) {
-                    console.log('ERROR: No data!');
-                } else {
-                    values.push(parseInt(data.field1));
-                    var date = new Date(data.created_at);
-                    dates.push('' + date.getHours() + ':' + date.getMinutes());
-                }
-            });
-        }
-        if (field === 2) {
-            title = res.channel.field2;
-            res.feeds.forEach(data => {
-                if (data.field2 == null) {
-                    console.log('ERROR: No data!');
-                } else {
-                    values.push(parseInt(data.field2));
-                    var date = new Date(data.created_at);
-                    dates.push('' + date.getHours() + ':' + date.getMinutes());
-                }
-            });
-        }
-        if (field === 3) {
-            title = res.channel.field3;
-            res.feeds.forEach(data => {
-                if (data.field3 == null) {
-                    console.log('ERROR: No data!');
-                } else {
-                    values.push(parseInt(data.field3));
-                    var date = new Date(data.created_at);
-                    dates.push('' + date.getHours() + ':' + date.getMinutes());
-                }
-            });
-        }
-        if (field === 4) {
-            title = res.channel.field4;
-            res.feeds.forEach(data => {
-                if (data.field4 == null) {
-                    console.log('ERROR: No data!');
-                } else {
-                    values.push(parseInt(data.field4));
-                    var date = new Date(data.created_at);
-                    dates.push('' + date.getHours() + ':' + date.getMinutes());
-                }
-            });
-        }
-        if (field === 5) {
-            title = res.channel.field5;
-            res.feeds.forEach(data => {
-                if (data.field5 == null) {
-                    console.log('ERROR: No data!');
-                } else {
-                    values.push(parseInt(data.field5));
-                    var date = new Date(data.created_at);
-                    dates.push('' + date.getHours() + ':' + date.getMinutes());
-                }
-            });
-        }
-        if (field === 6) {
-            title = res.channel.field6;
-            res.feeds.forEach(data => {
-                if (data.field6 == null) {
-                    console.log('ERROR: No data!');
-                } else {
-                    values.push(parseInt(data.field6));
-                    var date = new Date(data.created_at);
-                    dates.push('' + date.getHours() + ':' + date.getMinutes());
-                }
-            });
-        }
-        if (field === 7) {
-            title = res.channel.field7;
-            res.feeds.forEach(data => {
-                if (data.field7 == null) {
-                    console.log('ERROR: No data!');
-                } else {
-                    values.push(parseInt(data.field7));
-                    var date = new Date(data.created_at);
-                    dates.push('' + date.getHours() + ':' + date.getMinutes());
-                }
-            });
-        }
-        if (field === 8) {
-            title = res.channel.field8;
-            res.feeds.forEach(data => {
-                if (data.field8 == null) {
-                    console.log('ERROR: No data!');
-                } else {
-                    values.push(parseInt(data.field8));
-                    var date = new Date(data.created_at);
-                    dates.push('' + date.getHours() + ':' + date.getMinutes());
-                }
-            });
-        }
+        title = res.channel['field' + field];
+        res.feeds.forEach(data => {
+            if (data['field' + field] == null) {
+                console.log('ERROR: No data!');
+            } else {
+                values.push(parseInt(data['field' + field]));
+                var date = new Date(data.created_at);
+                dates.push('' + date.getHours() + ':' + date.getMinutes());
+            }
+        });
         this.setState({ 
             title: title,
             values: values,
@@ -242,6 +131,7 @@ class DataView extends Component {
         this.props.delete(this.props.index);
     }
 
+    // single value elements
     value = (title, value, date) => {
         return (
             <View style={styles.containerSingle}>
@@ -252,6 +142,7 @@ class DataView extends Component {
         );
     }
 
+    // graph values elements
     values = (title, values, dates) => {
         console.log('rendering values...: ' + values);
         return (
